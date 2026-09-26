@@ -1,0 +1,59 @@
+.perspective {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+/* Absolute sizing keeps the existing auto grid track and all UI positions intact. */
+.entrance {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: max(100%, clamp(260px, 30vw, 500px));
+  height: 90%;
+  transform: translateX(-50%);
+  perspective: 1200px;
+}
+.stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform-origin: 50% 85%;
+  --light-x: 50%;
+  --light-y: 40%;
+  --shadow-x: 0px;
+  --shadow-y: 0px;
+}
+.image, .shadow, .depth, .light, .shell {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.image { object-fit: contain; object-position: bottom; transform: translateZ(30px); }
+.shadow, .depth {
+  background: var(--portrait-image) center bottom / contain no-repeat;
+}
+.shadow {
+  opacity: 0.14;
+  filter: brightness(0) blur(24px);
+  transform: translate3d(calc(10px + var(--shadow-x)), calc(12px + var(--shadow-y)), -20px);
+}
+.depth { opacity: 0.08; filter: brightness(0.3) blur(2px); transform: translateZ(5px) scale(1.01); }
+.light {
+  transform: translateZ(31px);
+  background: radial-gradient(circle at var(--light-x) var(--light-y), rgb(255 255 255 / 20%), rgb(255 255 255 / 6%) 18%, transparent 42%);
+  mask: var(--portrait-image) center bottom / contain no-repeat;
+  mix-blend-mode: soft-light;
+  opacity: 0.7;
+}
+.shell { transform: translateZ(32px); }
+@media (max-width: 1279px) {
+  .entrance { width: 100%; height: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stage { transform: none !important; }
+  .light, .shell { display: none; }
+}
